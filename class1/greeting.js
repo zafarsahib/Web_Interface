@@ -1,3 +1,4 @@
+// This function takes a first name and a last name as parameters and returns a greeting message.
 function greeting(firstname, lastname){
     return `Hello, ${firstname} ${lastname}!`;
 }
