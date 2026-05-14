@@ -154,12 +154,85 @@ function renderUserCard(user){
     `;
 }
 
-function loadPostsForUser(userId){
+function loadPostsForUser(userId) {
 
-    console.log(
-        "Load posts for user:",
-        userId
-    );
+    const postsContainer =
+        document.getElementById(`posts-${userId}`);
+
+    postsContainer.innerHTML = `
+        <div class="text-secondary">
+            Loading posts...
+        </div>
+    `;
+
+    fetch("https://jsonplaceholder.typicode.com/posts")
+
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error(
+                    "Failed to load posts"
+                );
+            }
+
+            return response.json();
+
+        })
+
+        .then(posts => {
+
+            const userPosts = posts
+                .filter(post => post.userId === userId)
+                .slice(0,3);
+
+            renderPosts(
+                userPosts,
+                postsContainer
+            );
+
+        })
+
+        .catch(error => {
+
+            postsContainer.innerHTML = `
+                <div class="text-danger">
+                    ${error.message}
+                </div>
+            `;
+
+        });
 
 }
+
+function renderPosts(posts, container){
+
+    container.innerHTML = "";
+
+    posts.forEach(post => {
+
+        container.innerHTML += `
+
+        <div class="card mt-2">
+
+            <div class="card-body">
+
+                <h6>
+                    ${post.title}
+                </h6>
+
+                <p class="mb-0">
+                    ${post.body}
+                </p>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+
 
