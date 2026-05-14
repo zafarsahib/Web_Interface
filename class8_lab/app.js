@@ -97,3 +97,69 @@ function renderUserCard(user){
     `;
 }
 
+function renderUserCard(user){
+
+    usersContainer.innerHTML += `
+
+    <div class="col-md-6 col-lg-4">
+
+        <div class="card h-100 shadow">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    ${user.name}
+                </h5>
+
+                <p>
+                    <strong>Email:</strong>
+                    ${user.email}
+                </p>
+
+                <p>
+                    <strong>Phone:</strong>
+                    ${user.phone}
+                </p>
+
+                <p>
+                    <strong>City:</strong>
+                    ${user.address.city}
+                </p>
+
+                <p>
+                    <strong>Company:</strong>
+                    ${user.company.name}
+                </p>
+
+                <button
+                    class="btn btn-primary mt-2"
+                    onclick="loadPostsForUser(${user.id})">
+
+                    Load Posts
+
+                </button>
+
+                <div
+                    id="posts-${user.id}"
+                    class="mt-3">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    `;
+}
+
+function loadPostsForUser(userId){
+
+    console.log(
+        "Load posts for user:",
+        userId
+    );
+
+}
+
