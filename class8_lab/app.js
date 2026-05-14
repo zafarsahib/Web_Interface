@@ -3,13 +3,10 @@ const clearBtn=document.getElementById("clearBtn");
 const status=document.getElementById("status");
 const usersContainer=document.getElementById("usersContainer");
 
-function setStatus(message, type) {
+function loadUsers() {
 
-    status.innerHTML = `
-        <div class="alert alert-${type}">
-            ${message}
-        </div>
-    `;
+    setStatus("Loading users...", "warning");
+
 }
 
-setStatus("Ready","success");
+loadBtn.addEventListener("click", loadUsers);
