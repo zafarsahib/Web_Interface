@@ -2,6 +2,7 @@ const loadBtn=document.getElementById("loadBtn");
 const clearBtn=document.getElementById("clearBtn");
 const status=document.getElementById("status");
 const usersContainer=document.getElementById("usersContainer");
+const postCache = {};
 
 function setStatus(message, type) {
 
@@ -132,10 +133,11 @@ function renderUserCard(user){
                 </p>
 
                 <button
-                    class="btn btn-primary mt-2"
-                    onclick="loadPostsForUser(${user.id})">
+                id="btn-${user.id}"
+                class="btn btn-primary mt-2"
+                onclick="loadPostsForUser(${user.id})">
 
-                    Load Posts
+                Load Posts
 
                 </button>
 
@@ -159,48 +161,104 @@ function loadPostsForUser(userId) {
     const postsContainer =
         document.getElementById(`posts-${userId}`);
 
+    const button =
+        document.getElementById(`btn-${userId}`);
+
+    if (
+        postCache[userId] &&
+        postsContainer.style.display !== "none"
+    ) {
+
+        postsContainer.style.display = "none";
+
+        button.textContent = "Show Posts";
+
+        return;
+    }
+
+    if (
+        postCache[userId] &&
+        postsContainer.style.display === "none"
+    ) {
+
+        postsContainer.style.display = "block";
+
+        button.textContent = "Hide Posts";
+
+        return;
+    }
+
     postsContainer.innerHTML = `
-        <div class="text-secondary">
-            Loading posts...
+
+        <div class="text-center">
+
+            <div
+                class="spinner-border spinner-border-sm"
+                role="status">
+
+            </div>
+
+            <p class="mt-2">
+                Loading posts...
+            </p>
+
         </div>
+
     `;
 
-    fetch("https://jsonplaceholder.typicode.com/posts")
 
-        .then(response => {
+    fetch(
+        "https://jsonplaceholder.typicode.com/posts"
+    )
 
-            if (!response.ok) {
-                throw new Error(
-                    "Failed to load posts"
-                );
-            }
+    .then(response => {
 
-            return response.json();
+        if(!response.ok){
 
-        })
-
-        .then(posts => {
-
-            const userPosts = posts
-                .filter(post => post.userId === userId)
-                .slice(0,3);
-
-            renderPosts(
-                userPosts,
-                postsContainer
+            throw new Error(
+                "Failed to load posts"
             );
 
-        })
+        }
 
-        .catch(error => {
+        return response.json();
 
-            postsContainer.innerHTML = `
-                <div class="text-danger">
-                    ${error.message}
-                </div>
-            `;
+    })
 
-        });
+    .then(posts => {
+
+        const userPosts = posts
+
+            .filter(
+                post => post.userId === userId
+            )
+
+            .slice(0,3);
+
+        postCache[userId] = userPosts;
+
+        renderPosts(
+            userPosts,
+            postsContainer
+        );
+
+        button.textContent = "Hide Posts";
+
+    })
+
+    .catch(error => {
+
+        postsContainer.innerHTML = `
+
+            <div class="text-danger">
+
+                ${error.message}
+
+            </div>
+
+        `;
+
+    });
 
 }
 
