@@ -3,6 +3,7 @@ const clearBtn=document.getElementById("clearBtn");
 const status=document.getElementById("status");
 const usersContainer=document.getElementById("usersContainer");
 const postCache = {};
+let allUsers = [];
 
 function setStatus(message, type) {
 
@@ -31,9 +32,9 @@ function loadUsers() {
 
         .then(users => {
 
-            users
-                .slice(0,5)
-                .forEach(renderUserCard);
+            allUsers = users.slice(0, 5);
+
+            renderUsers(allUsers);
 
             setStatus(
                 "Users loaded successfully",
@@ -96,6 +97,14 @@ function renderUserCard(user){
     </div>
 
     `;
+}
+
+function renderUsers(users) {
+
+    usersContainer.innerHTML = "";
+
+    users.forEach(renderUserCard);
+
 }
 
 function renderUserCard(user){
@@ -291,6 +300,24 @@ function renderPosts(posts, container){
     });
 
 }
+
+const searchInput =
+    document.getElementById("searchInput");
+
+searchInput.addEventListener("input", function () {
+
+    const searchTerm =
+        this.value.toLowerCase();
+
+    const filteredUsers =
+        allUsers.filter(user =>
+            user.name.toLowerCase().includes(searchTerm)
+        );
+
+    renderUsers(filteredUsers);
+
+});
+
 
 
 
