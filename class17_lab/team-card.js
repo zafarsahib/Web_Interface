@@ -1,6 +1,7 @@
 // This file defines the TeamCard custom element, which is used to 
 // display information about a team in the tournament. it includes shadow DOM 
 // for encapsulation and card styles, as well as event handling for user interactions.
+// team-card.js
 
 class TeamCard extends HTMLElement {
 
@@ -88,50 +89,78 @@ class TeamCard extends HTMLElement {
             .team-card {
 
                 padding: 20px;
-                background-color: white;
+
+                background-color:
+                white;
+
                 border: 1px solid #ccc;
+
                 border-radius: 10px;
 
                 margin-bottom: 20px;
 
                 box-shadow:
-                0 2px 5px rgba(
-                    0,0,0,0.1
+                0 2px 5px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.1
                 );
+
+                transition:
+                    transform 0.3s ease;
+            }
+
+            .team-card:hover {
+
+                transform:
+                    scale(1.03);
             }
 
             .leader {
 
-                border: 3px solid green;
+                border:
+                    3px solid green;
             }
 
             h3 {
 
-                color: #0d6efd;
-                margin-bottom: 10px;
+                color:
+                    #0d6efd;
+
+                margin-bottom:
+                    10px;
             }
 
             button {
 
-                margin-top: 10px;
-                padding: 8px 12px;
+                margin-top:
+                    10px;
+
+                padding:
+                    8px 12px;
 
                 background-color:
-                #0d6efd;
+                    #0d6efd;
 
-                color: white;
+                color:
+                    white;
 
-                border: none;
+                border:
+                    none;
 
-                border-radius: 5px;
+                border-radius:
+                    5px;
 
-                cursor: pointer;
+                cursor:
+                    pointer;
             }
 
             button:hover {
 
-                opacity: 0.9;
-
+                opacity:
+                    0.9;
             }
 
         </style>
@@ -158,16 +187,21 @@ class TeamCard extends HTMLElement {
 
         ${this.renderStyle()}
 
-        <div class="team-card ${isLeader ? "leader" : ""}">
+        <div
+            class="team-card ${isLeader ? "leader" : ""}">
 
             <h3>
+
                 ${this.getName()}
+
             </h3>
 
             <p>
 
                 <strong>
+
                     Group:
+
                 </strong>
 
                 ${this.getGroup()}
@@ -177,14 +211,17 @@ class TeamCard extends HTMLElement {
             <p>
 
                 <strong>
+
                     Points:
+
                 </strong>
 
                 ${this.getPoints()}
 
             </p>
 
-            <button id="detailsBtn">
+            <button
+                id="detailsBtn">
 
                 View Details
 
