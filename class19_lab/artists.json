@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "name": "Björk",
+    "genre": "Art Pop",
+    "stage": "Main Stage",
+    "time": "18:00",
+    "country": "Iceland",
+    "headliner": true
+  },
+  {
+    "id": 2,
+    "name": "Radiohead",
+    "genre": "Alternative Rock",
+    "stage": "Main Stage",
+    "time": "21:30",
+    "country": "UK",
+    "headliner": true
+  },
+  {
+    "id": 3,
+    "name": "Rosalía",
+    "genre": "Pop / Flamenco",
+    "stage": "River Stage",
+    "time": "19:00",
+    "country": "Spain",
+    "headliner": false
+  },
+  {
+    "id": 4,
+    "name": "Tame Impala",
+    "genre": "Psychedelic Pop",
+    "stage": "River Stage",
+    "time": "20:15",
+    "country": "Australia",
+    "headliner": false
+  },
+  {
+    "id": 5,
+    "name": "Aphex Twin",
+    "genre": "Electronic",
+    "stage": "Night Stage",
+    "time": "23:00",
+    "country": "UK",
+    "headliner": true
+  },
+  {
+    "id": 6,
+    "name": "FKA twigs",
+    "genre": "Experimental Pop",
+    "stage": "Garden Stage",
+    "time": "17:30",
+    "country": "UK",
+    "headliner": false
+  }
+]
