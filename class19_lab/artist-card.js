@@ -73,6 +73,31 @@ class ArtistCard extends HTMLElement {
         const artist =
             this.getArtistData();
 
+        const card =
+            clone.querySelector(
+                ".artist-card"
+            );
+
+        // Feature Branch Enhancement
+        // Highlight headliner artists
+
+        if (
+            artist.headliner
+        ) {
+
+            card.style.border =
+                "3px solid gold";
+
+            card.style.backgroundColor =
+                "#fff9db";
+
+            clone.querySelector(
+                ".headliner-badge"
+            ).style.display =
+                "block";
+
+        }
+
         clone.querySelector(
             ".artist-name"
         ).textContent =
@@ -87,17 +112,6 @@ class ArtistCard extends HTMLElement {
             ".artist-stage"
         ).textContent =
             `Stage: ${artist.stage}`;
-
-        if (
-            artist.headliner
-        ) {
-
-            clone.querySelector(
-                ".artist-card"
-            ).style.border =
-                "3px solid gold";
-
-        }
 
         clone.querySelector(
             ".detailsBtn"
