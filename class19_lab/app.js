@@ -63,6 +63,16 @@ function loadArtists() {
 
         .then(data => {
 
+            if (
+                !Array.isArray(data)
+            ) {
+
+                throw new Error(
+                    "Invalid artist data."
+                );
+
+            }
+
             allArtists =
                 data.map(
                     artist =>
@@ -70,6 +80,33 @@ function loadArtists() {
                             artist
                         )
                 );
+
+            if (
+                allArtists.length === 0
+            ) {
+
+                artistsContainer.innerHTML = `
+
+                    <div class="col-12 text-center">
+
+                        <p class="text-muted">
+
+                            No artists available.
+
+                        </p>
+
+                    </div>
+
+                `;
+
+                setStatus(
+                    "No artists found.",
+                    "info"
+                );
+
+                return;
+
+            }
 
             renderArtists(
                 allArtists,
@@ -85,6 +122,18 @@ function loadArtists() {
 
         .catch(error => {
 
+            artistsContainer.innerHTML = "";
+
+            detailsContainer.innerHTML = `
+
+                <div class="alert alert-light text-center">
+
+                    No artist selected.
+
+                </div>
+
+            `;
+
             setStatus(
                 error.message,
                 "danger"
@@ -96,7 +145,21 @@ function loadArtists() {
 
 function clearLineup() {
 
-    artistsContainer.innerHTML = "";
+    allArtists = [];
+
+    artistsContainer.innerHTML = `
+
+        <div class="col-12 text-center">
+
+            <p class="text-muted">
+
+                No artists loaded.
+
+            </p>
+
+        </div>
+
+    `;
 
     detailsContainer.innerHTML = `
 
