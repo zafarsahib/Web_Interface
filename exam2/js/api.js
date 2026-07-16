@@ -1,20 +1,19 @@
 export async function getFestivalData() {
-  const artistResponse = fetch("./artist.json");
 
-  const performanceResponse = fetch("./performances.json");
+const responses = await Promise.all([
+  fetch("./artists.json"),
+  fetch("./performances.json")
+]);
 
-  const responses = Promise.all(artistResponse, performanceResponse);
+const [artistResponse, performanceResponse] = responses;
 
-  if (artistResponse.ok || performanceResponse.ok) {
+  if (!artistResponse.ok || !performanceResponse.ok) {
     throw new Error("Festival data could not be loaded.");
   }
 
-  const artists = artistResponse.json;
+  const artists = await artistResponse.json();
 
-  const performances = performanceResponse.json();
+  const performances = await performanceResponse.json();
 
-  return {
-    artist: artists,
-    performance: performances,
-  };
+  return { artists, performances};
 }
