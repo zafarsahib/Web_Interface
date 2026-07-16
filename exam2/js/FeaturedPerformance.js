@@ -1,7 +1,6 @@
 import { Performance } from "./Performance.js";
 
 export class FeaturedPerformance extends Performance {
-
     constructor(
         id,
         title,
@@ -12,7 +11,6 @@ export class FeaturedPerformance extends Performance {
         ticketsRemaining,
         featured
     ) {
-
         super(
             id,
             title,
@@ -29,5 +27,4 @@ export class FeaturedPerformance extends Performance {
     get lineupLabel() {
         return "Featured performance";
     }
-
 }

@@ -1,112 +1,99 @@
-export class PerformanceCard {
+export class PerformanceCard extends HTMLElement {
     constructor() {
         super();
 
-        this._performance = null;
-  
-        const shadow =
-            this.attachShadow({
-                mode: "open"
-            });
+        this.attachShadow({
+            mode: "open"
+        });
 
-
-        const template =
-            document.getElementById(
-                "performance-template"
-            );
-
-        shadow.appendChild(
-            template.cloneNode()
+        const template = document.getElementById(
+            "performance-card-template"
         );
+
+        const clone = template.content.cloneNode(true);
+
+        this.shadowRoot.appendChild(clone);
+
+        this._performance = null;
     }
 
     set performance(value) {
-        this.performance = value;
-        this.render;
+        this._performance = value;
+        this.render();
     }
 
     get performance() {
-        return this.performance;
+        return this._performance;
     }
 
     render() {
+        if (!this._performance) {
+            return;
+        }
+
         const article =
-            document.querySelector(
+            this.shadowRoot.querySelector(
                 ".performance-card"
             );
 
-        article.className =
-            "performance-card";
+        article.className = "performance-card";
 
-        if (this.performance.featured) {
-            article.classList.add(
-                "sold-out"
-            );
+        if (this._performance.featured) {
+            article.classList.add("featured");
         }
 
-        if (!this.performance.hasTickets) {
-            article.classList.add(
-                "featured"
-            );
+        if (!this._performance.hasTickets) {
+            article.classList.add("sold-out");
         }
 
         this.shadowRoot
             .querySelector(".title")
             .textContent =
-                this.performance.title;
+                this._performance.title;
 
         this.shadowRoot
             .querySelector(".artist")
             .textContent =
-                this.performance
-                    .artist.displayLabel();
+                this._performance.artist.displayLabel;
 
         this.shadowRoot
             .querySelector(".country")
             .textContent =
-                this.performance.artist.genre;
+                this._performance.artist.country;
 
         this.shadowRoot
             .querySelector(".genre")
             .textContent =
-                this.performance.artist.country;
+                this._performance.artist.genre;
 
         this.shadowRoot
             .querySelector(".stage")
             .textContent =
-                `Stage: ${
-                    this.performance.time
-                }`;
+                `Stage: ${this._performance.stage}`;
 
         this.shadowRoot
             .querySelector(".time")
             .textContent =
-                `Time: ${
-                    this.performance.stage
-                }`;
+                `Time: ${this._performance.time}`;
 
         this.shadowRoot
             .querySelector(".price")
             .textContent =
-                this.performance
-                    .formattedPrice();
+                this._performance.formattedPrice;
 
         this.shadowRoot
             .querySelector(".tickets")
             .textContent =
-                this.performance
-                    .ticketLabel();
+                this._performance.ticketLabel;
 
         this.shadowRoot
-            .querySelector(
-                ".lineup-label"
-            )
+            .querySelector(".lineup-label")
             .textContent =
-                this.performance.lineupLabel;
+                this._performance.lineupLabel;
     }
 }
 
 customElements.define(
-    "performance",
-    PerformanceCard()
+    "performance-card",
+    PerformanceCard
 );
