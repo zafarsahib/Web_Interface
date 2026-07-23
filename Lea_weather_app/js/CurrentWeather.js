@@ -1,3 +1,5 @@
+import { getCurrentWeather } from "./api.js";
+
 export class CurrentWeather extends HTMLElement {
 
     constructor() {
@@ -22,36 +24,89 @@ export class CurrentWeather extends HTMLElement {
 
     connectedCallback() {
 
-        this.render();
+        this.loadWeather();
 
     }
 
-    render() {
+    async loadWeather() {
+
+        this.showStatus(
+            "Loading weather..."
+        );
+
+        navigator.geolocation.getCurrentPosition(
+
+            async (position) => {
+
+                try {
+
+                    const weather =
+                        await getCurrentWeather(
+                            position.coords.latitude,
+                            position.coords.longitude
+                        );
+
+                    this.render(weather);
+
+                }
+                catch (error) {
+
+                    this.showStatus(
+                        error.message
+                    );
+
+                }
+
+            },
+
+            () => {
+
+                this.showStatus(
+                    "Location permission denied."
+                );
+
+            }
+
+        );
+
+    }
+
+    showStatus(message) {
+
+        this.shadowRoot
+            .querySelector(".status")
+            .textContent = message;
+
+    }
+
+    render(weather) {
+
+        const current =
+            weather.current_weather;
 
         this.shadowRoot
             .querySelector(".temperature")
             .textContent =
-                "Temperature: -- °C";
+                `Temperature: ${current.temperature} °C`;
 
         this.shadowRoot
             .querySelector(".windspeed")
             .textContent =
-                "Wind Speed: -- km/h";
+                `Wind Speed: ${current.windspeed} km/h`;
 
         this.shadowRoot
             .querySelector(".winddirection")
             .textContent =
-                "Wind Direction: --°";
+                `Wind Direction: ${current.winddirection}°`;
 
         this.shadowRoot
             .querySelector(".weathercode")
             .textContent =
-                "Weather Code: --";
+                `Weather Code: ${current.weathercode}`;
 
-        this.shadowRoot
-            .querySelector(".status")
-            .textContent =
-                "Waiting to load weather...";
+        this.showStatus(
+            "Current weather loaded successfully."
+        );
 
     }
 
