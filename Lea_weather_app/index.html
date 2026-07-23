@@ -44,5 +44,44 @@
         src="./js/app.js"
     ></script>
 
+    <template id="weather-card-template">
+
+    <style>
+
+        :host {
+            display: block;
+        }
+
+        .card {
+            max-width: 500px;
+            margin: auto;
+        }
+
+    </style>
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <h2 class="card-title">
+                Current Weather
+            </h2>
+
+            <p class="temperature"></p>
+
+            <p class="windspeed"></p>
+
+            <p class="winddirection"></p>
+
+            <p class="weathercode"></p>
+
+            <p class="status"></p>
+
+        </div>
+
+    </div>
+
+</template>
+
 </body>
 </html>
