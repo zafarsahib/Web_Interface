@@ -1,5 +1,6 @@
 import { getCurrentWeather } from "./api.js";
 
+
 export class CurrentWeather extends HTMLElement {
 
     constructor() {
@@ -10,15 +11,20 @@ export class CurrentWeather extends HTMLElement {
             mode: "open"
         });
 
+
         const template =
             document.getElementById(
                 "weather-card-template"
             );
 
+
         const clone =
             template.content.cloneNode(true);
 
-        this.shadowRoot.appendChild(clone);
+
+        this.shadowRoot.appendChild(
+            clone
+        );
 
     }
 
@@ -27,12 +33,14 @@ export class CurrentWeather extends HTMLElement {
 
         this.loadWeather();
 
+
         this.shadowRoot
             .querySelector(".location-button")
             .addEventListener(
                 "click",
                 () => this.loadWeatherByLocation()
             );
+
 
         this.shadowRoot
             .querySelector(".coordinate-button")
@@ -50,15 +58,24 @@ export class CurrentWeather extends HTMLElement {
             "Loading weather..."
         );
 
+
         const latitude =
-            this.getAttribute("latitude");
+            this.getAttribute(
+                "latitude"
+            );
+
 
         const longitude =
-            this.getAttribute("longitude");
+            this.getAttribute(
+                "longitude"
+            );
 
 
-        // Use manual attributes if provided.
-        if (latitude && longitude) {
+        // Use manual coordinates when attributes exist.
+        if (
+            latitude &&
+            longitude
+        ) {
 
             await this.loadWeatherByCoordinates(
                 latitude,
@@ -69,6 +86,7 @@ export class CurrentWeather extends HTMLElement {
 
         }
 
+
         // Otherwise use browser location.
         this.loadWeatherByLocation();
 
@@ -77,17 +95,24 @@ export class CurrentWeather extends HTMLElement {
 
     loadManualWeather() {
 
+        this.updateResultTitle(
+            "Manual Coordinates"
+        );
+
+
         const latitude =
             this.shadowRoot
                 .querySelector(".latitude")
                 .value
                 .trim();
 
+
         const longitude =
             this.shadowRoot
                 .querySelector(".longitude")
                 .value
                 .trim();
+
 
 
         if (
@@ -97,9 +122,11 @@ export class CurrentWeather extends HTMLElement {
 
             this.clearWeather();
 
+
             this.showStatus(
                 "Please enter both latitude and longitude."
             );
+
 
             return;
 
@@ -123,6 +150,7 @@ export class CurrentWeather extends HTMLElement {
             "Loading weather..."
         );
 
+
         try {
 
             const weather =
@@ -131,14 +159,17 @@ export class CurrentWeather extends HTMLElement {
                     longitude
                 );
 
+
             this.render(
                 weather
             );
+
 
         }
         catch (error) {
 
             this.clearWeather();
+
 
             this.showStatus(
                 error.message
@@ -151,13 +182,20 @@ export class CurrentWeather extends HTMLElement {
 
     loadWeatherByLocation() {
 
+        this.updateResultTitle(
+            "Current Location"
+        );
+
+
         this.showStatus(
             "Loading weather..."
         );
 
+
         navigator.geolocation.getCurrentPosition(
 
             async (position) => {
+
 
                 await this.loadWeatherByCoordinates(
 
@@ -167,11 +205,14 @@ export class CurrentWeather extends HTMLElement {
 
                 );
 
+
             },
+
 
             () => {
 
                 this.clearWeather();
+
 
                 this.showStatus(
                     "Location permission denied."
@@ -184,6 +225,18 @@ export class CurrentWeather extends HTMLElement {
     }
 
 
+
+    updateResultTitle(source) {
+
+        this.shadowRoot
+            .querySelector(".result-title")
+            .textContent =
+            `Weather Result (${source})`;
+
+    }
+
+
+
     clearWeather() {
 
         this.shadowRoot
@@ -191,22 +244,26 @@ export class CurrentWeather extends HTMLElement {
             .textContent =
             "Temperature:";
 
+
         this.shadowRoot
             .querySelector(".windspeed")
             .textContent =
             "Wind Speed:";
+
 
         this.shadowRoot
             .querySelector(".winddirection")
             .textContent =
             "Wind Direction:";
 
+
         this.shadowRoot
             .querySelector(".weathercode")
             .textContent =
-            "Weather Code:";
+            "Weather:";
 
     }
+
 
 
     showStatus(message) {
@@ -219,38 +276,112 @@ export class CurrentWeather extends HTMLElement {
     }
 
 
+
+    getWeatherDescription(weatherCode) {
+
+        switch (weatherCode) {
+
+            case 0:
+                return "Clear Sky";
+
+
+            case 1:
+                return "Mainly Clear";
+
+
+            case 2:
+                return "Partly Cloudy";
+
+
+            case 3:
+                return "Overcast";
+
+
+            case 45:
+            case 48:
+                return "Fog";
+
+
+            case 51:
+            case 53:
+            case 55:
+                return "Drizzle";
+
+
+            case 61:
+            case 63:
+            case 65:
+                return "Rain";
+
+
+            case 71:
+            case 73:
+            case 75:
+                return "Snow";
+
+
+            case 95:
+                return "Thunderstorm";
+
+
+            default:
+                return `Weather Code ${weatherCode}`;
+
+        }
+
+    }
+
+
+
     render(weather) {
 
         const current =
             weather.current_weather;
+
+
+        const description =
+            this.getWeatherDescription(
+                current.weathercode
+            );
+
+
 
         this.shadowRoot
             .querySelector(".temperature")
             .textContent =
             `Temperature: ${current.temperature} °C`;
 
+
+
         this.shadowRoot
             .querySelector(".windspeed")
             .textContent =
             `Wind Speed: ${current.windspeed} km/h`;
+
+
 
         this.shadowRoot
             .querySelector(".winddirection")
             .textContent =
             `Wind Direction: ${current.winddirection}°`;
 
+
+
         this.shadowRoot
             .querySelector(".weathercode")
             .textContent =
-            `Weather Code: ${current.weathercode}`;
+            `Weather: ${description}`;
+
+
 
         this.showStatus(
-            "Current weather loaded successfully."
+            "Weather loaded successfully."
         );
 
     }
 
 }
+
 
 
 customElements.define(
